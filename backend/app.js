@@ -138,8 +138,7 @@ app.get("/courses", (req, res) => {
 
 app.post("/mailprocess", (req, res) => {
   const { email , userId} = req.body;
-  console.log('Received request to send email to:', email);
-
+  console.log(userId);
   sendEmail(email , userId)
     .then((response) => {
       res.status(200).send(response.message);
