@@ -12,17 +12,23 @@ function Login(){
     const [error, setError] = useState('');
     const [emailvalidate, setEmailValidate] = useState(false);
     const [passvalidate, setPassValidate] = useState(false);
+    const [evalidate,setEValidate]=useState(false);
+    const [pvalidate,setPValidate]=useState(false);
 
     const navigate = useNavigate();
 
     const login = async (e) => {
         e.preventDefault();
 
-        if (!password) {
-            setPassValidate(true);
+        if (email.length===0) {
+            setEValidate(true);
+            
+        }
+        if(password.length===0)
+        {
+            setPValidate(true);
             return;
         }
-
         try {
             const response = await fetch("http://localhost:8800/login", {
                 method: "POST",
@@ -76,6 +82,10 @@ function Login(){
                 <input type="email" className='form-control' style={{width:'100%' ,  marginRight:'50px'}}
                     onChange={(e) =>{
                         setEmail(e.target.value);
+                        if(email.length>0)
+                        {
+                            setEValidate(false);
+                        }
                         const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                         if(!pattern.test(e.target.value))
                         {
@@ -84,21 +94,26 @@ function Login(){
                         else{
                             setEmailValidate(false);
                         }
-                    }} value={email}  required />
+                    }} value={email}   />
                   {emailvalidate ? <p style={{color:'red'}}>Enter a valid email.</p> : ""}
+                  {evalidate ? <p style={{color:'red'}}>This field should not be empty!</p> : ""}
                 
                 <label htmlFor="password">Password : </label>
                 <input type="password" className='form-control' style={{width:'100%'}}
                     onChange={(e) =>{ 
                         setPassword(e.target.value)
+                        if(password.length>0)
+                        {
+                            setPValidate(false);
+                        }
                         if(e.target.value === ""){
                             setPassValidate(true);
                         } else {
                             setPassValidate(false);
                         }
-                    }} value={password}  required   />
+                    }} value={password}    />
                   {passvalidate ? <p style={{color:'red'}}>Please enter a password.</p>:"" }
-                
+                  {pvalidate ? <p style={{color:'red'}}>This field should not be empty!</p> : ""}
                 <span>Forget Password? <Link to={"/mail-sent"}> Here</Link></span>
                 <div className='btn1' ><button type="submit" className='btn btn-success btn-md mybtn' >LOGIN</button></div>
             </form>

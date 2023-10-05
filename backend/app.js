@@ -136,6 +136,7 @@ app.get("/courses", (req, res) => {
   });
 });
 
+
 app.post("/mailprocess", (req, res) => {
   const { email , userId} = req.body;
   console.log(userId);
@@ -234,6 +235,13 @@ app.delete("/delete", (req, res) => {
   const { courseId } = req.body;
   console.log("Delete course with ID: " + courseId);
 
+  const deleteDiscussionQuery = "DELETE FROM discussion WHERE course_id=?";
+  db.query(deleteDiscussionQuery,[courseId],(err,data)=>{
+    if (err) {
+      console.error("Error deleting from assessment:", err);
+      return res.status(500).json({ error: "Error deleting from assessment" });
+    }
+  
   // Delete from 'assessment' table
   const deleteAssessmentQuery = "DELETE FROM assessment WHERE course_id = ?";
   db.query(deleteAssessmentQuery, [courseId], (err, data) => {
@@ -268,6 +276,7 @@ app.delete("/delete", (req, res) => {
 
           console.log("Deleted course with ID: " + courseId);
           return res.json("Successfully deleted..!");
+        });
         });
       });
     });
