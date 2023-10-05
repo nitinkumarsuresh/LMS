@@ -3,7 +3,7 @@ const mysql = require("mysql");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
-
+require('dotenv').config();
 
 
 const app = express();
@@ -22,7 +22,7 @@ function sendEmail(email , userId) {
     service: 'gmail',
     auth: {
       user: "nitinkumarsuresh04@gmail.com",
-      pass: "pqpkzwhayfmogndm",
+      pass: process.env.GMAIL_APP_PASSWORD,
     },
   });
   console.log(email);
