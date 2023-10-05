@@ -21,14 +21,14 @@ function sendEmail(email , userId) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: "nitinkumarsuresh04@gmail.com",
+      user: process.env.GMAIl_ID,
       pass: process.env.GMAIL_APP_PASSWORD,
     },
   });
   console.log(email);
 
   const mailOptions = {
-    from: 'nitinkumarsuresh04@gmail.com',
+    from: process.env.GMAIl_ID,
     to: email,
     subject: 'Password Reset Link',
     text: `Use the following link to reset your password: http://localhost:3000/reset-password/${userId}`,
