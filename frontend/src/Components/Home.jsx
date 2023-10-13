@@ -38,7 +38,7 @@ function Home(){
   useEffect(() => {
     const interval = setInterval(() => {
       const now = new Date();
-      const futureDate = new Date("2023-10-08T23:59:59"); // Replace with your target future date and time
+      const futureDate = new Date("2023-10-25T23:59:59"); // Replace with your target future date and time
       const timeDifference = futureDate - now;
       
       if (timeDifference <= 0) {

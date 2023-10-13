@@ -1,19 +1,22 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
-
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Sendmail() {
-  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [userId, setUserId] = useState();
   const [isFetched, setIsFetched] = useState(false);
   const [emailvalidate, setEmailValidate] = useState(false);
+  const [evalidate, setEValidate] = useState(false);
 
   const mailprocess = async (e) => {
     e.preventDefault();
+
+    if (email.length === 0) {
+      setEValidate(true);
+      return; // Don't proceed if the email field is empty
+    }
 
     await fetch(`http://localhost:8800/details?email=${email}`)
       .then((data) => data.json())
@@ -22,14 +25,8 @@ function Sendmail() {
         setIsFetched(true);
       });
 
-    if (!email) {
-      alert("Enter an email");
-      return;
-    }
-
-    if (isFetched){
+    if (isFetched) {
       try {
-      
         await fetch("http://localhost:8800/mailprocess", {
           method: "POST",
           headers: {
@@ -49,7 +46,6 @@ function Sendmail() {
         console.error("An error occurred. Please try again.", error);
       }
     }
-    
   };
 
   return (
@@ -59,11 +55,7 @@ function Sendmail() {
         <div className="container">
           <h2 style={{ color: "darkblue" }}>Password Recovery</h2>
           <br />
-          <form
-            autoComplete="off"
-            className="form-group"
-            onSubmit={mailprocess}
-          >
+          <form autoComplete="off" className="form-group" onSubmit={mailprocess}>
             <label htmlFor="email" style={{ marginBottom: "20px" }}>
               Enter your email:
             </label>
@@ -73,8 +65,12 @@ function Sendmail() {
               style={{ width: "100%", marginRight: "50px" }}
               onChange={(e) => {
                 setEmail(e.target.value);
+
+                if (email.length > 0) {
+                  setEValidate(false);
+                }
                 const pattern =
-                  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+                  /^[a-zA-Z0-9._%+-]+@[a-zAZ0-9.-]+\.[a-zA-Z]{2,}$/;
                 if (!pattern.test(e.target.value)) {
                   setEmailValidate(true);
                 } else {
@@ -82,14 +78,18 @@ function Sendmail() {
                 }
               }}
               value={email}
-              required
             />
             {emailvalidate ? (
               <p style={{ color: "red" }}>Enter a valid email.</p>
             ) : (
               ""
             )}
-            <br />
+            {evalidate ? (
+              <p style={{ color: "red" }}>This field should not be empty!</p>
+            ) : (
+              ""
+            )}
+
             <div className="btn1">
               <button
                 type="submit"

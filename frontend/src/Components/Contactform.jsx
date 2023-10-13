@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function ContactForm() {
   const [state, handleSubmit] = useForm("maygpbgd");
 
+  // const[formValidate,setFormvalidate]= useState(false);
+
   
   const [formData, setFormData] = useState({
     name: '',
@@ -22,21 +24,45 @@ function ContactForm() {
   };
 
   const handleFormSubmit = async (e) => {
-    await handleSubmit(e);
+    e.preventDefault(); // Prevent the default form submission
+  
+    // Check if all required fields are filled
+    if (
+      formData.name !== '' &&
+      formData.email !== '' &&
+      formData.number !== '' &&
+      formData.message !== ''
+    ) {
+      await handleSubmit(e);
+      // setFormvalidate(false)
+      // Reset the form data and show the success message
       setFormData({
         name: '',
         email: '',
         number: '',
         message: '',
       });
-      (toast.success('Message Sent', {
-        position: 'top-right', // You can customize the position here
-        autoClose: 1000, // Automatically close after 3 seconds (adjust as needed)
-        hideProgressBar: false, // Show a progress bar
-        closeOnClick: true, // Close the toast on click
-        pauseOnHover: false, // Pause the timer when hovering over
-        draggable: false, // Allow dragging the toast
-      }));
+      
+      toast.success('Message Sent', {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+      });
+    } else {
+      // Display an error message because some fields are empty
+      // setFormvalidate(true)
+      toast.warning('All fields are required', {
+        position: 'top-right',
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: false,
+      });
+    }
   };
   
 
@@ -48,6 +74,7 @@ function ContactForm() {
         <h4>Let's Connect</h4>
         <p>We're here to help and provide information on a wide range of topics and tasks.</p>
         <div className="form-row">
+          
           <input
             id="name"
             type="text"
@@ -56,6 +83,7 @@ function ContactForm() {
             value={formData.name}
             onChange={handleInputChange}
           />
+          {/* {formValidate && (<p>This field cannot be empty!!</p>)} */}
           <ValidationError prefix="Name" field="name" errors={state.errors} />
           <input
             id="email"

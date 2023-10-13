@@ -167,8 +167,12 @@ const Course = () => {
           height:'30%',
           paddingLeft:'40px'
         }}
-      > <h3>Progress</h3>
+      > <h3>Progress :</h3>
+      
         <Progress  percent={Math.ceil((played / duration) *100)} status="active" />
+        <br/>
+        <h3>Report :</h3>
+        <p>You have completed {Math.ceil((played / duration) *100)}% of this course.</p>
       </div>
       <Forum courseid={courseId} />
     </div>
