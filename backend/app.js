@@ -46,23 +46,6 @@ function sendEmail(email , userId) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 app.get("/users", (req, res) => {
   const q = "SELECT * FROM Users";
   db.query(q, (err, data) => {

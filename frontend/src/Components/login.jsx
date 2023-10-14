@@ -117,7 +117,7 @@ function Login(){
                 <span>Forget Password? <Link to={"/mail-sent"}> Here</Link></span>
                 <div className='btn1' ><button type="submit" className='btn btn-success btn-md mybtn' >LOGIN</button></div>
             </form>
-            {error && <span className='error-msg' style={{color:'red'}}>{error}</span>}
+            {error && <span className='error-msg' style={{color:'red',fontWeight:'bold'}}>{error}</span>}
             <br/>
             <span style={{marginBottom:'140px'}}>Don't have an account? Register
                 <Link to="/register"> Here</Link>
