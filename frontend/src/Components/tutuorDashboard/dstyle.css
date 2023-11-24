@@ -325,12 +325,15 @@ body {
 
 
 /* MAIN */
-#content main {
+#content  .t{
 	width: 100%;
+	
 	padding: 36px 24px;
 	font-family: var(--poppins);
-	max-height: calc(100vh - 56px);
+	/* max-height: calc(100vh - 56px); */
 	overflow-y: auto;
+	
+	background-color: var(--blue);
 }
 #content main .head-title {
 	display: flex;
@@ -364,7 +367,7 @@ body {
 	align-items: center;
 	grid-gap: 40px;
 	margin-top: 10px;
-	width:50%;
+	width:40%;
 }
 #content main .box-info li .bx {
 	width: 80px;
@@ -386,10 +389,6 @@ body {
 #content main .box-info li:nth-child(3) .bx {
 	background: var(--light-orange);
 	color: var(--orange);
-}
-#content main .box-info li:nth-child(4) .bx {
-	background: var(--light-blue);
-	color: var(--blue);
 }
 #content main .box-info li .text h3 {
 	font-size: 24px;
@@ -590,4 +589,17 @@ body {
 	#content main .table-data .todo .todo-list {
 		min-width: 420px;
 	}
+}
+
+        
+.sgn-but{
+	background-color: red;
+	color:white;
+	padding: 8px 12px;
+	border-radius: 10px;
+	font-weight: bold;
+}
+
+.sgn-but:hover{
+	background-color: rgb(172, 22, 22);
 }

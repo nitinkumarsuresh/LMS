@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import ImgUpload from "./ImgUpload";
+import Performance from "./DashBoard/Performance";
+
 
 function Profile() {
   const navigate = useNavigate();
@@ -60,15 +62,15 @@ function Profile() {
         <ImgUpload onChange={handleImageChange} src={profileImage} />
         <h2 className="profile-name">{userDetails?.name}</h2>
         
-        <div><h4>Email: </h4><p className="profile-email">{userDetails?.email}</p></div>
+        <div style={{marginTop:'30px'}}><h4>Email: </h4><p className="profile-email">{userDetails?.email}</p></div>
         <div><h4>Phone Number: </h4><p className="profile-phno">{userDetails?.phno}</p></div>
-        <div><h4>About: </h4><p className="profile-about">{userDetails?.about}</p></div>
+        {/* <div><h4>DOB: </h4><p className="profile-about">{userDetails?.dob}</p></div> */}
         <div><h4>Institution: </h4><p className="profile-institution">{userDetails?.institution}</p></div>
-        <div><h4>Role: </h4><p className="profile-role">{userDetails?.role}</p></div>
+        <div><h4>Qualification: </h4><p className="profile-role">{userDetails?.qualification}</p></div>
         <div><h4>Domain: </h4><p className="profile-domain">{userDetails?.domain}</p></div>
       </div>
       
-    
+      <Performance/>
     </div>
   );
 }

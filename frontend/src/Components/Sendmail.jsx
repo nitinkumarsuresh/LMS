@@ -9,54 +9,134 @@ function Sendmail() {
   const [isFetched, setIsFetched] = useState(false);
   const [emailvalidate, setEmailValidate] = useState(false);
   const [evalidate, setEValidate] = useState(false);
+  const [error, setError] = useState('');
+  const [category,setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState(false);
+
+    
 
   const mailprocess = async (e) => {
     e.preventDefault();
-
+    if (category === '') {
+      setCategoryError(true);
+  
+  } else {
+      setCategoryError(false);
+  }
     if (email.length === 0) {
       setEValidate(true);
       return; // Don't proceed if the email field is empty
     }
-
-    await fetch(`http://localhost:8800/details?email=${email}`)
-      .then((data) => data.json())
-      .then((data) => {
+    if(category === 'tutor'){
+      try {
+        const response = await fetch(`http://localhost:8800/detailstutor?email=${email}`);
+    
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        console.log(data[0]);
         setUserId(data[0].id);
         setIsFetched(true);
-      });
-
-    if (isFetched) {
-      try {
-        await fetch("http://localhost:8800/mailprocess", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, userId }),
-        });
-        toast.success("Mail sent successfully", {
-          position: "top-right",
-          autoClose: 1000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: false,
-        });
+    
+        if (isFetched) {
+          try {
+            console.log('tutorrecovery')
+            console.log(userId);
+            await fetch("http://localhost:8800/tutormailprocess", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, userId }),
+            });
+            toast.success("Mail sent successfully", {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+            });
+          } catch (error) {
+            setError("An error occurred. Please try again.", error);
+          }
+        }
       } catch (error) {
-        console.error("An error occurred. Please try again.", error);
+        setError("email not exists", error);
+      }
+    }else{
+      try {
+        const response = await fetch(`http://localhost:8800/detailsuser?email=${email}`);
+    
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+    
+        const data = await response.json();
+        console.log(data[0])
+        setUserId(data[0].id);
+        setIsFetched(true);
+    
+        if (isFetched) {
+          console.log('userrecovery')
+          console.log(userId);
+          try {
+            await fetch("http://localhost:8800/usermailprocess", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, userId }),
+            });
+            toast.success("Mail sent successfully", {
+              position: "top-right",
+              autoClose: 1000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: false,
+              draggable: false,
+            });
+          } catch (error) {
+            setError("An error occurred. Please try again.", error);
+          }
+        }
+      } catch (error) {
+        setError("email not exists", error);
       }
     }
+    
   };
+  
 
   return (
     <div>
       <Navbar />
       <div className="auth">
-        <div className="container">
+        <div className="container" style={{height:'70vh'}}>
           <h2 style={{ color: "darkblue" }}>Password Recovery</h2>
           <br />
           <form autoComplete="off" className="form-group" onSubmit={mailprocess}>
-            <label htmlFor="email" style={{ marginBottom: "20px" }}>
+          <div style={{height:'55px'}}>
+          
+          <select
+                style={{width:'100%'}}
+                  name="category"
+                  value={category}
+                  onChange={(e)=>{setCategory(e.target.value);
+                    setCategoryError(false);
+                    }}
+                  
+                >
+                  <option value="">
+                    <p>Category</p>
+                  </option>
+                  <option value="user">User</option>
+                  <option value="tutor">Tutor</option>
+                </select>
+                {categoryError ? <p style={{ color: 'red', fontSize: '14px' }}>This field should not be empty!</p> : ''}</div>
+            <div style={{height:'50px'}}><label htmlFor="email" style={{ marginBottom: "10px" }}>
               Enter your email:
             </label>
             <input
@@ -85,12 +165,12 @@ function Sendmail() {
               ""
             )}
             {evalidate ? (
-              <p style={{ color: "red" }}>This field should not be empty!</p>
+              <p style={{ color: "red",fontSize:'14px' }}>This field should not be empty!</p>
             ) : (
               ""
-            )}
+            )}</div>
 
-            <div className="btn1">
+            <div className="btn1" style={{marginTop:'60px'}}>
               <button
                 type="submit"
                 className="btn btn-success btn-md mybtn"
@@ -100,6 +180,7 @@ function Sendmail() {
               </button>
             </div>
           </form>
+          {error && <span className='error-msg' style={{color:'red',fontWeight:'bold',fontSize:'14px'}}>{error}</span>}
         </div>
       </div>
     </div>

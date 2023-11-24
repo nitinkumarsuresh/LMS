@@ -22,7 +22,8 @@
     const value = props.page;
     const navigate = useNavigate() 
     const authToken = localStorage.getItem("token");
-    const username= localStorage.getItem("name");
+    const username= localStorage.getItem("name") || localStorage.getItem("tutor_name");
+    const tutorToken = localStorage.getItem("tutor_token");
 
     
 
@@ -33,6 +34,10 @@
       localStorage.removeItem("name");
       localStorage.removeItem("id");
       localStorage.removeItem("profileImage");
+      localStorage.removeItem("tutor_id");
+    localStorage.removeItem("tutor_name");
+    localStorage.removeItem("tutor_email");
+    localStorage.removeItem("tutor_token");
       toast.success('Signed Out ', {
         position: 'top-right', 
         autoClose: 1000, 
@@ -57,24 +62,27 @@
               {value==="About" ?(<li style={{backgroundColor:"purple",borderRadius:"5px"}}><Link to={"/about"} style={{color:"white",padding:'12px'}}>About</Link></li>):(<li><Link to={"/about"}>About</Link></li>)}
               {value==="contact"?(<li style={{backgroundColor:"purple",borderRadius:"5px"}}><Link to={"/contact"} style={{color:"white",padding:'12px'}}>Contact</Link></li>):(<li><Link to={"/contact"}>Contact</Link></li>)}
               
-              {authToken ? (
+              {authToken && tutorToken ==null ? (
                 value === "courses" ? (
                   <li style={{ backgroundColor: "purple", borderRadius: "5px" }}>
                     <Link to={"/courses"} style={{ color: "white", padding: '12px' }}><FontAwesomeIcon id="symbol" icon={faBook} />  Courses</Link></li>) : (<li><Link to={"/courses"}><FontAwesomeIcon id="symbol" icon={faBook}/> Courses</Link></li>)) : (<></>)}
 
-               {authToken ? (
+               {authToken && tutorToken ==null ? (
                 value === "learnings" ? (
                   <li style={{ backgroundColor: "purple", borderRadius: "5px" }}>
                     <Link to={"/learnings"} style={{ color: "white", padding: '12px' }}><FontAwesomeIcon id="symbol" icon={faChalkboardUser} />  Learnings</Link></li>) : (<li><Link to={"/learnings"}><FontAwesomeIcon icon={faChalkboardUser} />  Learnings</Link></li>)) : (<></>)}
                 
+              { tutorToken!==null ? (
+                <li style={{borderRadius: "5px" }}>
+                <Link to={"/Tdashboard"} style={{ padding: '12px' }}><FontAwesomeIcon id="symbol" icon={faChalkboardUser} />  Dashboard</Link></li>
+                  ) : (<></>)}
 
-              {authToken ? (
+              {authToken  ? (
                 value === "profile" ? (
                   <li style={{ backgroundColor: "purple", borderRadius: "5px" }}>
                     <Link to={"/profile"} style={{ color: "white", padding: '12px' }}> <FontAwesomeIcon id="symbol" icon={faUser} />  {username}</Link></li>) : (<li><Link to={"/profile"}><FontAwesomeIcon icon={faUser} />  {username}</Link></li>)) : (<></>)}
-
                   
-              {authToken !== null ? (
+              {authToken !== null || tutorToken ? (
               <li>
               <button onClick={handleLogOut} className="sign-out-button">
                 Sign Out

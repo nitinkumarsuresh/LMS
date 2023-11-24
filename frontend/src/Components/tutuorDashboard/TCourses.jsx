@@ -1,7 +1,7 @@
 import React from "react";
 import "./dstyle.css"; // Import your CSS styles
 import { Link } from "react-router-dom";
-import SideBar from "./SideBar";
+import SideBar from "./TSideBar";
 import Navbar from "./Navbar";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -31,7 +31,8 @@ function Courses() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:8800/courses")
+    const id = localStorage.getItem("tutor_id");
+    fetch(`http://localhost:8800/tcourses/${id}`)
       .then((response) => response.json())
       .then((data) => {
         setCourses(data);
@@ -61,24 +62,27 @@ function Courses() {
   function editCourse(course_id) {
     navigate(`/editCourse/${course_id}`);
   }
+  function addquestions(course_id){
+    navigate(`/addquestions/${course_id}`)
+  }
   return (
     <>
-      <body style={{ backgroundColor: "#eee" }}>
+      <body className="dark" style={{ backgroundColor: "#eee" }}>
         <SideBar current={"courses"} />
         <section id="content">
           <Navbar />
-          <main>
+          <main className="t">
             <div className="table-data" style={{ marginTop: "-10px" }}>
               <div className="order">
                 <div id="course" className="todo">
                   <div className="head" style={{ marginTop: "-100px" }}>
-                    <h3>Courses</h3>
+                    <h3 style={{color:'white'}}>Courses</h3>
                     <button
                       onClick={() => navigate("/addcourse")}
                       style={{
-                        backgroundColor: "darkblue",
+                        backgroundColor: "white",
                         borderRadius: "10px",
-                        color: "white",
+                        color: "darkblue",
                         border: "none",
                         padding: "8px",
                         fontWeight: "500",
@@ -91,12 +95,13 @@ function Courses() {
                   <ul className="todo-list">
                     {courses.map((course) => (
                       <div key={course.course_id}>
-                        <li className="completed" style={{ marginTop: "10px" }}>
-                          <p>{course.course_name}</p>
+                        <li className="completed" style={{ marginTop: "10px",backgroundColor:'white',color:'black' }}>
+                          <p >{course.course_name}</p>
                           <div style={{ width: "50px", display: "flex" }}>
                               <button
                                 onClick={() => {setOpenModal(true);setCid(course.course_id)}}
-                                style={{ marginRight: "25px" }}
+	
+                                style={{ marginLeft: "-100px",marginRight:'40px' ,backgroundColor:'white'}}
                                 className="delete-button"
                               >
                               <FontAwesomeIcon icon={faTrash}></FontAwesomeIcon>
@@ -104,9 +109,23 @@ function Courses() {
 
                             <button
                               onClick={() => editCourse(course.course_id)}
+                              style={{ marginRight: "40px" ,backgroundColor:'white'}}
                               className="edit-button"
                             >
-                              <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon>
+                              <FontAwesomeIcon    icon={faEdit}></FontAwesomeIcon>
+                            </button>
+                              
+                            <button onClick={() => addquestions(course.course_id)}
+                            style={{
+                              backgroundColor: "#457BC1",
+                              borderRadius: "10px",
+                              color: "white",
+                              border: "none",
+                              padding: "8px",
+                              fontWeight: "500",
+                            }}
+                            >
+                              Test
                             </button>
                           </div>
                         </li>

@@ -3,26 +3,26 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function AddCourse() {
+function AddQuestion() {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
-    name: '',
-    instructor: '',
-    price: '',
-    description: '', // Corrected field name here
-    y_link: '',
-    p_link: '',
-    tutor_id: localStorage.getItem('tutor_id'),
+    question: '',
+    option1: '',
+    option2: '',
+    option3: '',
+    option4: '',
+    answer: '',
+    courseId: '', // You should populate this with the actual courseId
   });
 
   const [formErrors, setFormErrors] = useState({
-    name: '',
-    instructor: '',
-    price: '',
-    description: '', // Corrected field name here
-    y_link: '',
-    p_link: '',
+    question: '',
+    option1: '',
+    option2: '',
+    option3: '',
+    option4: '',
+    answer: '',
   });
 
   const handleChange = (e) => {
@@ -31,24 +31,25 @@ function AddCourse() {
 
     // Validate input and set error message
     let error = '';
-    if (name === 'name' && value === '') {
-      error = 'Course name is required';
-    } else if (name === 'instructor' && value === '') {
-      error = 'Instructor is required';
-    } else if (name === 'price' && value === '') {
-      error = 'Price is required';
-    } else if (name === 'description' && value === '') {
-      error = 'Description is required';
-    } else if (name === 'y_link' && value === '') {
-      error = 'Video Link is required';
+    if (name === 'question' && value === '') {
+      error = 'question is required';
+    } else if (name === 'option1' && value === '') {
+      error = 'option1 is required';
+    } else if (name === 'option2' && value === '') {
+      error = 'option2 is required';
+    } else if (name === 'option3' && value === '') {
+      error = 'option3 is required';
+    } else if (name === 'option4' && value === '') {
+      error = 'option4 is required';
     } else if (name === 'p_link' && value === '') {
-      error = 'Image Link is required';
+      error = 'answer is required';
     }
     setFormErrors({ ...formErrors, [name]: error });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formKeys = Object.keys(formData);
     let isFormValid = true;
     const newFieldErrors = { ...formErrors };
@@ -65,23 +66,11 @@ function AddCourse() {
       // setError("All fields are required")
       return
     }
-
-
-
-
-    
-    // for (const key in formErrors) {
-    //   if (formErrors[key]) {
-    //     setError('Please fill in all required fields.');
-    //     return;
-    //   }
-    // }
-    
-
+    // Check for empty fields and set error messages
     
 
     try {
-      const response = await fetch('http://localhost:8800/addCourse', {
+      const response = await fetch('http://localhost:8800/addQuestion', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,8 +79,8 @@ function AddCourse() {
       });
 
       if (response.status === 200) {
-        console.log('Course Added successfully!');
-        navigate('/tCourses');
+        console.log('Question Added successfully!');
+        navigate('/Questions');
         toast.success('Added successfully', {
           position: 'top-right',
           autoClose: 1000,
@@ -105,119 +94,115 @@ function AddCourse() {
         setError(data.error);
       }
     } catch (error) {
-      setError('Course add error:', error);
+      setError('Question add error:', error);
     }
   };
 
   return (
     <div className="add">
       <div className="container1">
-        <h2>Course Registration</h2>
-        <form onSubmit={handleSubmit} className="addCourse-form"  noValidate>
-          <label>Name: </label>
+        <h2>Add Question</h2>
+        <form onSubmit={handleSubmit} className="addQuestion-form" noValidate>
+          <label>Question: </label>
           <input
             type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            style={{ width: '100%'   }}
-          />
-          <div style={{height:'25px'}}>
-          {formErrors.name && (
-            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.name}
-            </span>
-          )}
-          </div>
-
-          <label>Instructor: </label>
-          <input
-            type="text"
-            name="instructor"
-            value={formData.instructor}
+            name="question"
+            value={formData.question}
             onChange={handleChange}
             required
             style={{ width: '100%' }}
           />
           <div style={{height:'25px'}}>
-          {formErrors.instructor && (
+          {formErrors.question && (
             <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.instructor}
+              {formErrors.question}
             </span>
-          )}
-          </div>
+          )}</div>
 
-          <label>Price: </label>
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            required
-            style={{ width: '100%' }}
-          />
-          <div style={{height:'25px'}}>
-          {formErrors.price && (
-            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.price}
-            </span>
-          )}
-          </div>
-
-          <label>Description: </label>
+          <label>Option 1: </label>
           <input
             type="text"
-            name="description"
-            value={formData.description}
+            name="option1"
+            value={formData.option1}
             onChange={handleChange}
             required
             style={{ width: '100%' }}
           />
           <div style={{height:'25px'}}>
-          {formErrors.description && (
+          {formErrors.option1 && (
             <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.description}
+              {formErrors.option1}
+            </span>
+          )}</div>
+
+          <label>Option 2: </label>
+          <input
+            type="text"
+            name="option2"
+            value={formData.option2}
+            onChange={handleChange}
+            required
+            style={{ width: '100%' }}
+          />
+          <div style={{height:'25px'}}>
+          {formErrors.option2 && (
+            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
+              {formErrors.option2}
+            </span>
+          )}</div>
+
+          <label>Option 3: </label>
+          <input
+            type="text"
+            name="option3"
+            value={formData.option3}
+            onChange={handleChange}
+            required
+            style={{ width: '100%' }}
+          />
+          <div style={{height:'25px'}}>
+          {formErrors.option3 && (
+            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
+              {formErrors.option3}
+            </span>
+          )}</div>
+
+          <label>Option 4: </label>
+          <input
+            type="text"
+            name="option4"
+            value={formData.option4}
+            onChange={handleChange}
+            required
+            style={{ width: '100%' }}
+          />
+          <div style={{height:'25px'}}>
+          {formErrors.option4 && (
+            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
+              {formErrors.option4}
             </span>
           )}
           </div>
 
-          <label>Video Link: </label>
+          <label>Answer: </label>
           <input
             type="text"
-            name="y_link"
-            value={formData.y_link}
+            name="answer"
+            value={formData.answer}
             onChange={handleChange}
             required
             style={{ width: '100%' }}
           />
           <div style={{height:'25px'}}>
-          {formErrors.y_link && (
+          {formErrors.answer && (
             <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.y_link}
-            </span>
-          )}
-          </div>
-
-          <label>Image Link: </label>
-          <input
-            type="text"
-            name="p_link"
-            value={formData.p_link}
-            onChange={handleChange}
-            required
-            style={{ width: '100%' }}
-          />
-          <div style={{height:'25px'}}>
-          {formErrors.p_link && (
-            <span className="error-msg" style={{ color: 'red', fontWeight: 'bold', textAlign: 'start' }}>
-              {formErrors.p_link}
+              {formErrors.answer}
             </span>
           )}</div>
 
           {error && <span className="error-msg">{error}</span>}
           <div className="btn1">
-            <button type="submit">Add Course</button>
+            <button type="submit">Add Question</button>
           </div>
         </form>
       </div>
@@ -225,4 +210,4 @@ function AddCourse() {
   );
 }
 
-export default AddCourse;
+export default AddQuestion;

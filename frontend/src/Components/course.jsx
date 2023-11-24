@@ -4,8 +4,23 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Forum from './forum';
 import ReactPlayer from "react-player";
 import { Progress } from 'antd';
+import { Button, Modal } from 'antd';
 
 const Course = () => {
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
+
+
   const [course, setCourse] = useState({
     course_name: "",
     instructor: "",
@@ -19,7 +34,9 @@ const Course = () => {
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(null);
   const [played, setPlayed] = useState(0);
+  const [changePlayed , setChangePlayed] = useState(0);
   const [userId , setUserId] = useState(localStorage.getItem("id"));
+  const [popup,setPopup] = useState(false);
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -51,7 +68,9 @@ const Course = () => {
     fetch(`http://localhost:8800/progress?userId=${userId}&courseId=${courseId}`)
       .then((response) => response.json())
       .then((data) => {
-        setPlayed(data[0].playedTime)
+        setPlayed(data[0].playedTime);
+        setDuration(data[0].duration);
+  
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -68,13 +87,13 @@ const Course = () => {
          duration,
        })
        .then(() => {
-         setPlayed(played);
+         setPlayed(changePlayed<played?played:changePlayed);
        })
        .catch((error) => {
          console.error("Error updating progress:", error);
        });
      }
-  },[played]);
+  },[changePlayed]);
 
   
   
@@ -98,7 +117,7 @@ const Course = () => {
             <ReactPlayer
               ref={playerRef}
               onProgress={(Progress)=>{
-                setPlayed(Progress.playedSeconds);
+                setChangePlayed(Progress.playedSeconds);
                 // if (played === duration) {
                 //   setPlayed(duration);
                 // }
@@ -156,7 +175,33 @@ const Course = () => {
             <h4>Content type: Video</h4>
             <div  >
             <button className="enroll-button" onClick={() => navigate("/learnings")} >Back</button>
-            <button className="enroll-button" onClick={() => navigate(`/assessment/${course.course_id}`)} style={{marginLeft:'633px',marginTop:'-500px'}}> Take Quizz</button>
+            {Math.ceil((played / duration) *100)===100 && (<button className="enroll-button" onClick={() => navigate(`/assessment/${course.course_id}`)} style={{marginLeft:'683px',marginTop:'-500px'}}> Quizz</button>)}
+            {Math.ceil((played / duration) * 100) !== 100 && (
+
+  <button
+    className="enroll-button-deactive"
+    onClick={showModal}
+    style={{ marginLeft: '653px', marginTop: '-500px' }}
+  >
+    Quizz
+  </button>
+)}
+
+      {/* sample */}
+      
+      <Modal  title="Note:" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <p style={{color:'black',fontWeight:'bold',fontSize:'15px'}}>Complete 100% of your course to take Quizz</p>
+
+      </Modal>
+      {/* sample */}
+
+
+
+
+
+
+
+            {popup && (<p style={{backgroundColor:'#017bff',width:"30%",padding:'8px',borderRadius:'10px',color:'white',marginLeft:'703px',marginTop:'10px'}}>Complete 100% of your course to take Quizz</p>)}
             </div>
         </div>
       </div>

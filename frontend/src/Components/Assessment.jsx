@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { faBackward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal } from 'antd';
+import axios from 'axios';
 
 function YourComponent() {
 
@@ -37,6 +38,22 @@ function YourComponent() {
     }
     setSelectedAnswers(updatedSelectedAnswers);
 };
+
+const handleMarks = () =>{
+  const data = {
+    courseId: courseId, 
+    userId: localStorage.getItem("id"),  
+    marks: (correctCount/totalQsns)*100 
+  }
+  console.log(data);
+  axios.post('http://localhost:8800/addmarks', data)
+  .then(response => {
+    console.log('Request successful:', response.data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
 
 
  const showModal = () => {
@@ -112,7 +129,8 @@ let message = '';
         <div style={{padding: '20px 0 0 0 '}}>
           {/* <p>Correct Answers: {correctCount}</p> */}
           <button onClick={()=>navigate(0)} className="submit-button" style={{marginLeft:"30px",padding:"5px 15px"}}>Reset</button>
-          <button onClick={()=>setOpenModal(true)} className="submit-button11" >Submit</button>
+          <button onClick= {()=>{handleMarks();setOpenModal(true)}}
+          className="submit-button11" >Submit</button>
         </div>
       </div>
       <Modal

@@ -1,23 +1,25 @@
+
+
 import React, { useEffect  , useState} from 'react';
 import './dstyle.css'; // Import your CSS styles
-import SideBar from './SideBar';
+import SideBar from './TSideBar';
 import Navbar from './Navbar';
-function Users() {
-  const [users , setUsers] = useState([]);
+function Tutors() {
+  const [tutors , setTutors] = useState([]);
   useEffect(()=>{
-    fetch("http://localhost:8800/users").then((data)=>data.json()).then((res)=>setUsers(res));
+    fetch("http://localhost:8800/tutors").then((data)=>data.json()).then((res)=>setTutors(res));
   },[])
-  console.log(users);
+  console.log(tutors);
   return (
     <body style={{backgroundColor:"#eee"}}>
-      <SideBar current={"user"}/>
+      <SideBar current={"tutor"}/>
       <section id="content">
         <Navbar />
-        <main>
+        <main className='t'>
           <div className="table-data" style={{marginTop:"-10px"}}>
             <div className="order">
               <div className="head">
-                <h3>User Info</h3>
+                <h3>Tutors Info</h3>
                 {/* <i className='bx bx-search' id="i"></i>
                 <i className='bx bx-filter' id="i"></i> */}
               </div>
@@ -25,20 +27,20 @@ function Users() {
                 <thead>
                   <tr>
                     {/* <th>Sno</th>  */}
-                    <th>Username</th>
+                    <th>Tutorname</th>
                     <th>Email</th>
                     <th>Phone Number</th>
-                    <th>Role</th>
+                    <th>Qualification</th>
                   </tr>
                 </thead>
                 <tbody>
-                {users.map((user) => (
+                {tutors.map((tutor) => (
                    <tr>
                     {/* <td>{user.id}</td> */}
-                   <td><p>{user.name}</p></td>
-                   <td>{user.email}</td>
-                   <td>{user.phno}</td>
-                   <td>{user.role}</td>
+                   <td><p>{tutor.tutor_name}</p></td>
+                   <td>{tutor.tutor_email}</td>
+                   <td>{tutor.tutor_phno}</td>
+                   <td>{tutor.tutor_qualification}</td>
                  </tr>
                 ))}
                 </tbody>
@@ -51,4 +53,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Tutors;

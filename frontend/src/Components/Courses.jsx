@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 // import { Link } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
+ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import {  toast } from 'react-toastify';
@@ -10,7 +10,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function Courses() {
 
   const [courses, setCourses] = useState([]);
-  // const navigate = useNavigate();
+   const navigate = useNavigate();
+   const[enrolled , SetEnrolled] = useState([]);
   // const authToken = localStorage.getItem("token");
   
   useEffect(() => {
@@ -22,38 +23,23 @@ function Courses() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-  }, []);
-
-  useEffect(() => {
-    console.log(courses); 
-  }, [courses]); 
-
-  function enrollCourse(courseId) {
-    const userId = localStorage.getItem("id");
-    axios.post('http://localhost:8800/enroll', { userId, courseId })
-      .then((response) => {
-        console.log('Enrollment successful:', response.data);
-        toast.success('Enrolled Successfully', {
-          position: 'top-right', // You can customize the position here
-          autoClose: 2000, // Automatically close after 3 seconds (adjust as needed)
-          hideProgressBar: false, // Show a progress bar
-          closeOnClick: true, // Close the toast on click
-          pauseOnHover: false, // Pause the timer when hovering over
-          draggable: false, // Allow dragging the toast
-        });
-
+      const userId = localStorage.getItem("id");
+    fetch(`http://localhost:8800/carts/${userId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        let arr = [];
+        for (let i=0;i<data.length ;i++){
+          arr.push(data[i].course_id);
+        }
+        SetEnrolled(arr);
       })
       .catch((error) => {
-        toast.warn('Already enrolled....', {
-          position: 'top-right', // You can customize the position here
-          autoClose: 2000, // Automatically close after 3 seconds (adjust as needed)
-          hideProgressBar: false, // Show a progress bar
-          closeOnClick: true, // Close the toast on click
-          pauseOnHover: false, // Pause the timer when hovering over
-          draggable: false, // Allow dragging the toast
-        });
-        
+        console.error("Error fetching data:", error);
       });
+  }, []);
+
+  function enrollCourse(courseId) {
+    navigate(`/payment/${courseId}`);
   }
   
 
@@ -71,9 +57,11 @@ return (
               <p className="course-description" style={{color:"grey"}}>Price: Rs.{course.price}</p>
               <p className="course-description">{course.description}</p>
             </div> 
-          <button className="enroll-button" onClick={() => enrollCourse(course.course_id)}>
+          {enrolled.includes(course.course_id) ? (<button className="enroll-button" style={{color:'#F4D03F',backgroundColor:'darkblue',fontWeight:'bold'}} onClick={() => navigate("/learnings")}>
+            Enrolled
+          </button> ):(<button className="enroll-button" onClick={() => enrollCourse(course.course_id)}>
             Enroll
-          </button> 
+          </button> )}
         </div>
       ))}
      </div>

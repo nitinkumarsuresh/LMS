@@ -40,9 +40,9 @@ function Contact() {
             <p>nitinkumarsuresh04@gmail.com <br />info@oneyesinfotechsolutions.com</p>
             <h3>Follow Us</h3>
             <div className="pro-links">
-              <FontAwesomeIcon icon={faFacebookF} className="i" />
-              <FontAwesomeIcon icon={faInstagram} className="i" />
-              <FontAwesomeIcon icon={faLinkedinIn} className="i" />
+              <FontAwesomeIcon icon={faFacebookF} onClick={()=> window.open('https://www.facebook.com/OneYesTechnologies/')} className="i" />
+              <FontAwesomeIcon icon={faInstagram} onClick={()=> window.open('https://www.instagram.com/oneyes_infotech_solutions/')} className="i" />
+              <FontAwesomeIcon icon={faLinkedinIn} onClick={()=> window.open('https://www.linkedin.com/company/oneyes-technologies/')} className="i" />
             </div>
           </div>
         </div>
