@@ -33,9 +33,20 @@ function sendEmailUser(email , userId) {
   const mailOptions = {
     from: process.env.GMAIl_ID,
     to: email,
-    subject: 'Password Reset Link',
-    text: `Use the following link to reset your password: http://localhost:3000/resetpassword/user/${userId}`,
-  };
+    subject: 'Password Reset for Oneyes Academy',
+    html: `
+        <p>Hello User,</p>
+        <p>We received a request to reset your password for Oneyes Academy. To proceed, please use the following link:</p>
+        <p>
+            <a href="http://localhost:3000/resetpassword/user/${userId}" target="_blank">
+                Reset Password
+            </a>
+        </p>
+        <p>This link will take you to a page where you can securely reset your password. If you did not request this password reset, you can safely ignore this email.</p>
+        <p>Thank you,</p>
+        <p>Oneyes Academy Team</p>
+    `,
+};
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -58,9 +69,21 @@ function sendEmailTutor(email , tutorId) {
   const mailOptions = {
     from: process.env.GMAIl_ID,
     to: email,
-    subject: 'Password Reset Link',
-    text: `Use the following link to reset your password: http://localhost:3000/resetpassword/tutor/${tutorId}`,
-  };
+    subject: 'Password Reset for Oneyes Academy',
+    html: `
+        <p>Hello Tutor,</p>
+        <p>We received a request to reset your password for Oneyes Academy. To proceed, please use the following link:</p>
+        <p>
+            <a href="http://localhost:3000/resetpassword/tutor/${tutorId}" target="_blank">
+                Reset Password
+            </a>
+        </p>
+        <p>This link will take you to a page where you can securely reset your password. If you did not request this password reset, you can safely ignore this email.</p>
+        <p>Thank you,</p>
+        <p>Oneyes Academy Team</p>
+    `,
+};
+
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
@@ -306,6 +329,34 @@ app.post("/updatepassword-tutor" , (req , res)=>{
     }
     return res.json("ok");
   })
+});
+
+
+app.post("/adminlogin", (req, res) => {
+  const { email, password } = req.body;
+  db.query("SELECT * FROM admin WHERE email = ?", [email], async (err, results) => {
+    if (err) {
+      console.error("Database query error:", err);
+      res.status(500).json({ error: "An error occurred" });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(400).json({ error: "Invalid email or password" });
+      return;
+    }
+    const user = results[0];
+    console.log(password+" "+user.password);
+    const passwordMatch =password===user.password;
+    if (!passwordMatch) {
+      res.status(400).json({ error: "Wrong password" });
+      return;
+    }
+    const token = jwt.sign({ userId: user.id, email: user.email }, "your_secret_key", {
+      expiresIn: "1h",
+    });
+
+    res.json({ token });
+  });
 });
 
 
@@ -671,6 +722,9 @@ app.post("/addtutor", (req, res) => {
     );
   });
 });
+
+
+
 
 
 app.get("/detailsuser", (req, res) => {

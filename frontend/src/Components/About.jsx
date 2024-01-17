@@ -16,7 +16,7 @@ function About(){
         <div>
         <Navbar page={"About"}/>
       <section id="about-home">
-        <h2>About OneYes Academy</h2>
+        <h2>About Us</h2>
       </section>
 
       <section id="about-container">

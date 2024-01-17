@@ -28,6 +28,7 @@ import DTutors from './Components/DashBoard/DTutors';
 
 import TDashboard from './Components/tutuorDashboard/TDashboard';
 import TCourses from './Components/tutuorDashboard/TCourses';
+import Alogin from './Components/Alogin';
 
 
 
@@ -40,7 +41,8 @@ function App() {
           <Route path='/resetpassword/user/:id' Component={PasswordReset}></Route>
           <Route path='/resetpassword/tutor/:id' Component={PasswordReset}></Route>
           <Route path='/mail-sent' Component={Sendmail}></Route>
-          <Route path='/dashboard' Component={Dashboard}></Route>
+          <Route path='/admin-dashboard' Component={Dashboard}></Route>
+          <Route path='/admin-auth' Component={Alogin}></Route>
           <Route path='/tdashboard' Component={TDashboard}></Route>
           <Route path='/login' Component={Login}></Route>
           <Route path='/register' Component={Register}></Route>
